@@ -1,0 +1,21 @@
+{
+  "name": "2015-08-chatterbox-server",
+  "version": "0.0.0",
+  "homepage": "https://github.com/lainjiang/2015-08-chatterbox-server",
+  "authors": [
+    "lain.lai.jiang@gmail.com <lain.lai.jiang@gmail.com>"
+  ],
+  "description": "chatterbox server",
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "client/bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "underscore": "~1.8.3"
+  }
+}

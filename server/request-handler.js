@@ -1,5 +1,4 @@
 /*************************************************************
-
 You should implement your request handler function in this file.
 
 requestHandler is already getting passed to http.createServer()
@@ -70,4 +69,6 @@ var defaultCorsHeaders = {
   "access-control-allow-headers": "content-type, accept",
   "access-control-max-age": 10 // Seconds.
 };
+
+module.exports = requestHandler;
 
