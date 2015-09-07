@@ -10,6 +10,9 @@ this file and include it in basic-server.js so that it actually works.
 *Hint* Check out the node module documentation at http://nodejs.org/api/modules.html.
 
 **************************************************************/
+var responseBody ={
+  results: []
+};
 
 var requestHandler = function(request, response) {
   // Request and Response come from node's http module.
@@ -30,6 +33,8 @@ var requestHandler = function(request, response) {
 
   // The outgoing status.
   var statusCode = 200;
+  var postCode = 201;
+  var wrongCode = 404;
 
   // See the note below about CORS headers.
   var headers = defaultCorsHeaders;
@@ -40,10 +45,29 @@ var requestHandler = function(request, response) {
   // other than plain text, like JSON or HTML.
   headers['Content-Type'] = "text/plain";
 
-  // .writeHead() writes to the request line and headers of the response,
-  // which includes the status and all headers.
-  response.writeHead(statusCode, headers);
+  if (request.url === '/classes/messages') {
+    if (request.method === 'POST'){
+      // .writeHead() writes to the request line and headers of the response,
+      // which includes the status and all headers.
+      request.on('data', function(messageChunk){
+        responseBody.results.push(JSON.parse(messageChunk.toString()));
+      });
 
+      request.on('end', function(message){
+        response.writeHead(postCode, headers);
+        response.end(JSON.stringify(responseBody));
+        console.log(responseBody);
+      });
+    }
+    else {
+      response.writeHead(statusCode, headers);
+      response.end(JSON.stringify(responseBody));
+    }
+  }
+  else {
+    response.writeHead(wrongCode, headers);
+    response.end();
+  }
   // Make sure to always call response.end() - Node may not send
   // anything back to the client until you do. The string you pass to
   // response.end() will be the body of the response - i.e. what shows
@@ -51,7 +75,6 @@ var requestHandler = function(request, response) {
   //
   // Calling .end "flushes" the response's internal buffer, forcing
   // node to actually send all the data over to the client.
-  response.end("Hello, World!");
 };
 
 // These headers will allow Cross-Origin Resource Sharing (CORS).
