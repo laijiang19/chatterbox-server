@@ -3,7 +3,7 @@ var app = {};
 app.parameters = window.location.search.replace(/%20/g, ' '); //?username=[input]
 app.currentUser = _.escape(app.parameters.substr(10)); //[input]
 // app.server = 'https://api.parse.com/1/classes/chatterbox';
-app.server = 'http://127.0.0.1:3000/classes/messages';
+app.server = 'http://127.0.0.1:3000';
 app.currentState = {}; //last 100 messages from server
 app.currentRoom = 'defaultRoom';
 app.allRooms = {};
