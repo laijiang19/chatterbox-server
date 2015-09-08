@@ -3,7 +3,7 @@ var app = {};
 app.parameters = window.location.search.replace(/%20/g, ' '); //?username=[input]
 app.currentUser = _.escape(app.parameters.substr(10)); //[input]
 // app.server = 'https://api.parse.com/1/classes/chatterbox';
-app.server = 'http://127.0.0.1:3000';
+app.server = 'http://localhost:3000/messages';
 app.currentState = {}; //last 100 messages from server
 app.currentRoom = 'defaultRoom';
 app.allRooms = {};
@@ -48,9 +48,9 @@ app.fetch = function() {
     success: function (data) {
       app.clearMessages(); //clear all the messages on current page
       app.currentState = {}; //zeros the current state object
-      var pData = JSON.parse(data);
-      for (var i = 0; i < pData.results.length; i++) {
-        var obj = pData.results[i];
+      // var pData = JSON.parse(data);
+      for (var i = 0; i < data.results.length; i++) {
+        var obj = data.results[i];
         var insertObj = {'username': _.unescape(obj.username), 'text': _.unescape(obj.text)};
         obj.roomname = _.unescape(obj.roomname);
         if (app.currentState[obj.roomname] !== undefined) {
