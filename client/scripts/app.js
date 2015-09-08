@@ -2,9 +2,10 @@ var app = {};
 
 app.parameters = window.location.search.replace(/%20/g, ' '); //?username=[input]
 app.currentUser = _.escape(app.parameters.substr(10)); //[input]
-app.server = 'https://api.parse.com/1/classes/chatterbox';
+// app.server = 'https://api.parse.com/1/classes/chatterbox';
+app.server = 'http://127.0.0.1:3000/classes/messages';
 app.currentState = {}; //last 100 messages from server
-app.currentRoom = 'defaultRoom'; 
+app.currentRoom = 'defaultRoom';
 app.allRooms = {};
 app.allRoomsLength = 0;
 app.first = true; //check if all rooms are initiated the first time around
@@ -16,7 +17,7 @@ app.init = function() {
   app.allRooms.defaultRoom = 'defaultRoom';
   app.fetch();
   $('#roomSelect').change(function(event) { //listens to change of room
-    app.currentRoom = $('#roomSelect option:selected').text(); 
+    app.currentRoom = $('#roomSelect option:selected').text();
     app.fetch();
     event.preventDefault();
   });
@@ -32,7 +33,7 @@ app.send = function(message){
 
     },
     error: function (data) {
-      console.error('chatterbox: Failed to send message \n data: '); 
+      console.error('chatterbox: Failed to send message \n data: ');
       console.dir(data);
     }
   });
@@ -44,12 +45,12 @@ app.fetch = function() {
     url: app.server,
     type: 'GET',
     contentType: 'application/json',
-    success: function (data) {   
+    success: function (data) {
       app.clearMessages(); //clear all the messages on current page
       app.currentState = {}; //zeros the current state object
-
-      for (var i = 0; i < data.results.length; i++) { 
-        var obj = data.results[i];
+      var pData = JSON.parse(data);
+      for (var i = 0; i < pData.results.length; i++) {
+        var obj = pData.results[i];
         var insertObj = {'username': _.unescape(obj.username), 'text': _.unescape(obj.text)};
         obj.roomname = _.unescape(obj.roomname);
         if (app.currentState[obj.roomname] !== undefined) {
@@ -57,7 +58,7 @@ app.fetch = function() {
         } else {
           app.currentState[obj.roomname] = [insertObj];
         }
-      }      
+      }
       app.allRooms = {};
       for (var key in app.currentState) {
         app.allRooms[key] = key;
@@ -86,10 +87,10 @@ app.clearRooms = function() {
 
 app.addMessage = function(message) {
   if (message.username === app.friend){
-    $('#chats').append('<div class = "chat friend"><div class = username>' + _.escape(message.username) + '</div><div>' + _.escape(message.text) + '</div></div>');
+    $('#chats').prepend('<div class = "chat friend"><div class = username>' + _.escape(message.username) + '</div><div>' + _.escape(message.text) + '</div></div>');
   }
   else {
-    $('#chats').append('<div class = chat><div class = username>' + _.escape(message.username) + '</div><div>' + _.escape(message.text) + '</div></div>');
+    $('#chats').prepend('<div class = chat><div class = username>' + _.escape(message.username) + '</div><div>' + _.escape(message.text) + '</div></div>');
   }
   $('.chat').off();
   $('.chat').click(function(event){
@@ -107,11 +108,11 @@ app.addRoom = function(room, allRoom) {
   if (app.allRooms[room] === undefined){
     app.allRooms[room] = room;
     $('#roomSelect').append($('<option>'+_.escape(room)+'</option>'));
-    app.allRoomsLength++; 
+    app.allRoomsLength++;
   }
   if (!allRoom){
     $('#roomSelect').val(room).attr('selected',true);
-    app.currentRoom = room; 
+    app.currentRoom = room;
   }
 };
 
@@ -148,7 +149,7 @@ app.addAllRooms = function () {
     for (var prop in app.allRooms){
       app.allRoomsLength++;
       app.addRoom(prop, true);
-    } 
+    }
   }
 };
 

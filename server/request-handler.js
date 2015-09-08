@@ -45,7 +45,7 @@ var requestHandler = function(request, response) {
   // other than plain text, like JSON or HTML.
   headers['Content-Type'] = "text/plain";
 
-  if (request.url === '/classes/messages') {
+  if (request.url.slice(0,8) === '/classes') {
     if (request.method === 'POST'){
       // .writeHead() writes to the request line and headers of the response,
       // which includes the status and all headers.
@@ -56,7 +56,6 @@ var requestHandler = function(request, response) {
       request.on('end', function(message){
         response.writeHead(postCode, headers);
         response.end(JSON.stringify(responseBody));
-        console.log(responseBody);
       });
     }
     else {
