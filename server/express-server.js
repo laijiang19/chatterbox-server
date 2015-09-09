@@ -39,15 +39,11 @@ app.get('/index.html', function(req, res){
 
 app.get('/messages', function(req, res){
   res.set(headers);
-  var data;
   fs.readFile('server/messages.JSON', function(err, msg){
-    data = msg.toString();
-  });
-  if (data !== undefined) {
-    data = '[' + data.slice(0, data.length - 1) + ']';
+    var data = '[' + msg.toString().slice(0, msg.toString().length - 1) + ']';
     data = JSON.parse(data);
     msgBody.results = data;
-  }
+  });
   res.status(200).send(JSON.stringify(msgBody));
 });
 
