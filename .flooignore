@@ -6,3 +6,4 @@ extern/
 node_modules/
 tmp
 vendor/
+server/messages.JSON

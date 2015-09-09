@@ -48,7 +48,6 @@ app.fetch = function() {
     success: function (data) {
       app.clearMessages(); //clear all the messages on current page
       app.currentState = {}; //zeros the current state object
-      // var pData = JSON.parse(data);
       for (var i = 0; i < data.results.length; i++) {
         var obj = data.results[i];
         var insertObj = {'username': _.unescape(obj.username), 'text': _.unescape(obj.text)};
